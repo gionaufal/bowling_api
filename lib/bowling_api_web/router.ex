@@ -24,4 +24,10 @@ defmodule BowlingApiWeb.Router do
       live_dashboard "/dashboard", metrics: BowlingApiWeb.Telemetry
     end
   end
+
+  scope "/", BowlingApiWeb do
+    pipe_through :api
+
+    resources "/games", GamesController, only: [:create]
+  end
 end
