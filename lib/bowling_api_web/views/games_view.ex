@@ -12,4 +12,12 @@ defmodule BowlingApiWeb.GamesView do
       }
     }
   end
+
+  def render("show.json", %{game: %Game{id: id, inserted_at: inserted_at}}) do
+    %{
+      id: id,
+      inserted_at: inserted_at,
+      score: 0
+    }
+  end
 end

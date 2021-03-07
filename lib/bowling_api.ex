@@ -7,4 +7,5 @@ defmodule BowlingApi do
   if it comes from the database, an external API or others.
   """
   defdelegate create_game(), to: BowlingApi.Game.Create, as: :call
+  defdelegate fetch_game(params), to: BowlingApi.Game.Get, as: :call
 end

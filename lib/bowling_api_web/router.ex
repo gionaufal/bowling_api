@@ -28,6 +28,6 @@ defmodule BowlingApiWeb.Router do
   scope "/", BowlingApiWeb do
     pipe_through :api
 
-    resources "/games", GamesController, only: [:create]
+    resources "/games", GamesController, only: [:create, :show]
   end
 end

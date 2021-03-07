@@ -14,7 +14,7 @@ defmodule BowlingApiWeb.ErrorView do
     %{errors: %{detail: Phoenix.Controller.status_message_from_template(template)}}
   end
 
-  def render("400.json", result) do
-    %{error: result}
+  def render("400.json", %{result: message}) do
+    %{errors: %{detail: message}}
   end
 end
