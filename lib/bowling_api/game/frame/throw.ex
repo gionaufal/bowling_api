@@ -8,11 +8,12 @@ defmodule BowlingApi.Game.Frame.Throw do
   @foreign_key_type Ecto.UUID
 
   schema "throws" do
+    field :pins, :integer, default: 0
     belongs_to(:frame, Frame)
     timestamps()
   end
 
-  @required [:frame_id]
+  @required [:frame_id, :pins]
 
   def build(params) do
     params

@@ -8,4 +8,5 @@ defmodule BowlingApi do
   """
   defdelegate create_game(), to: BowlingApi.Game.Create, as: :call
   defdelegate fetch_game(params), to: BowlingApi.Game.Get, as: :call
+  defdelegate new_throw(params), to: BowlingApi.Game.Frame.Throw.Create, as: :call
 end

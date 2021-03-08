@@ -1,5 +1,5 @@
 defmodule BowlingApi.Game.Frame.Throw.Create do
-  alias BowlingApi.{Game.Frame.Throw, Repo}
+  alias BowlingApi.{Game, Game.Frame.Throw, Repo}
 
   def call(params) do
     params
