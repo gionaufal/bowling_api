@@ -10,7 +10,7 @@ defmodule BowlingApi.Game.Get do
   end
 
   defp get(uuid) do
-    case Repo.get(Game, uuid) do
+    case Repo.get(Game, uuid) |> Repo.preload(:throws) do
       nil -> {:error, "Game not found!"}
       game -> {:ok, game}
     end
