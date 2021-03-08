@@ -25,5 +25,6 @@ defmodule BowlingApi.Game.Frame.Throw do
     %__MODULE__{}
     |> cast(params, @required)
     |> validate_required(@required)
+    |> validate_number(:pins, less_than_or_equal_to: 10)
   end
 end

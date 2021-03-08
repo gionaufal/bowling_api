@@ -14,12 +14,12 @@ defmodule BowlingApiWeb.GamesView do
     }
   end
 
-  def render("show.json", %{game: %Game{id: id, inserted_at: inserted_at, frames: frames}}) do
+  def render("show.json", %{game: %Game{id: id, inserted_at: inserted_at, frames: frames} = game}) do
     %{
       id: id,
       inserted_at: inserted_at,
       frames: render_many(frames, FramesView, "frame.json"),
-      score: 0
+      score: Enum.reduce(game.throws, 0, fn throw, acc -> throw.pins + acc end)
     }
   end
 end
