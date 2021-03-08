@@ -1,6 +1,8 @@
 defmodule BowlingApiWeb.GamesController do
   use BowlingApiWeb, :controller
 
+  alias BowlingApi.FrameCreator
+
   action_fallback BowlingApiWeb.FallbackController
 
   def create(conn, _params) do
@@ -33,8 +35,9 @@ defmodule BowlingApiWeb.GamesController do
   defp handle_response({:error, _changeset} = error, _conn, _view, _status), do: error
 
   defp build_throw_params({:ok, game}, pins) do
+    {:ok, frame} = FrameCreator.get_or_create_frame(game)
     %{
-      frame_id: get_frame_id(game),
+      frame_id: frame.id,
       pins: pins
     }
   end
