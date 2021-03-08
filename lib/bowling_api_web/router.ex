@@ -29,5 +29,6 @@ defmodule BowlingApiWeb.Router do
     pipe_through :api
 
     resources "/games", GamesController, only: [:create, :show]
+    post "/games/:id/new_throw", GamesController, :new_throw
   end
 end
