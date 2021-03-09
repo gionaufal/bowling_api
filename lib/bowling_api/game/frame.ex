@@ -26,4 +26,13 @@ defmodule BowlingApi.Game.Frame do
     |> cast(params, @required)
     |> validate_required(@required)
   end
+
+  def strike?(frame) do
+    List.first(frame.throws).pins == 10
+  end
+
+  def spare?(frame) do
+    Enum.count(frame.throws) == 2 &&
+      Enum.reduce(frame.throws, 0, fn throw, acc -> throw.pins + acc end) == 10
+  end
 end
