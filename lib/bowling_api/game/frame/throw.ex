@@ -2,6 +2,7 @@ defmodule BowlingApi.Game.Frame.Throw do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias BowlingApi.Repo
   alias BowlingApi.Game.Frame
 
   @primary_key {:id, Ecto.UUID, autogenerate: true}
@@ -26,5 +27,19 @@ defmodule BowlingApi.Game.Frame.Throw do
     |> cast(params, @required)
     |> validate_required(@required)
     |> validate_number(:pins, less_than_or_equal_to: 10)
+    |> validate_frame_total()
+  end
+
+  defp validate_frame_total(changeset) do
+    {:ok, frame} = Frame.Get.call(get_field(changeset, :frame_id))
+    frame_total = frame.throws
+      |> Enum.reduce(0, fn throw, acc -> throw.pins + acc end)
+
+    validate_change(changeset, :pins, fn _, value ->
+      case (value + frame_total) > 10 do
+        true -> [pins: "Total of pins in a frame can't be greater than 10"]
+        _ -> []
+      end
+    end)
   end
 end

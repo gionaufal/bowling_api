@@ -1,7 +1,7 @@
 defmodule BowlingApiWeb.GamesController do
   use BowlingApiWeb, :controller
 
-  alias BowlingApi.FrameCreator
+  alias BowlingApi.Game
 
   action_fallback BowlingApiWeb.FallbackController
 
@@ -21,28 +21,22 @@ defmodule BowlingApiWeb.GamesController do
     |> BowlingApi.fetch_game()
     |> build_throw_params(pins)
     |> BowlingApi.new_throw()
-
-    BowlingApi.fetch_game(id)
-    |> handle_response(conn, "show.json", :ok)
+    |> handle_response(conn, "new_throw.json", :created)
   end
 
   defp handle_response({:ok, game}, conn, view, status) do
     conn
     |> put_status(status)
-    |> render(view, game: game)
+    |> render(view, result: game)
   end
 
   defp handle_response({:error, _changeset} = error, _conn, _view, _status), do: error
 
   defp build_throw_params({:ok, game}, pins) do
-    {:ok, frame} = FrameCreator.get_or_create_frame(game)
+    {:ok, frame} = Game.get_or_create_frame(game)
     %{
       frame_id: frame.id,
       pins: pins
     }
-  end
-
-  defp get_frame_id(game) do
-    List.last(game.frames).id
   end
 end
