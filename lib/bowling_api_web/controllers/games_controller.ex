@@ -33,10 +33,16 @@ defmodule BowlingApiWeb.GamesController do
   defp handle_response({:error, _changeset} = error, _conn, _view, _status), do: error
 
   defp build_throw_params({:ok, game}, pins) do
-    {:ok, frame} = Game.get_or_create_frame(game)
+    Game.get_or_create_frame(game)
+    |> handle_get_or_create_frame(pins)
+  end
+
+  defp handle_get_or_create_frame({:ok, frame}, pins) do
     %{
       frame_id: frame.id,
       pins: pins
     }
   end
+
+  defp handle_get_or_create_frame({:error, _changeset} = error, _pins), do: error
 end

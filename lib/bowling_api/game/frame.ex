@@ -14,6 +14,7 @@ defmodule BowlingApi.Game.Frame do
   end
 
   @required [:game_id]
+  @max_frame_count 10
 
   def build(params) do
     params
@@ -25,6 +26,7 @@ defmodule BowlingApi.Game.Frame do
     %__MODULE__{}
     |> cast(params, @required)
     |> validate_required(@required)
+    |> validate_number_of_frames()
   end
 
   def strike?(frame) do
@@ -60,5 +62,16 @@ defmodule BowlingApi.Game.Frame do
 
   defp throw_index(game, throw) do
     Enum.find_index(game.throws, fn t -> t == throw end)
+  end
+
+  defp validate_number_of_frames(changeset) do
+    {:ok, game} = fetch_game(get_field(changeset, :game_id))
+    validate_change(changeset, :game_id, fn _, _ ->
+      case Enum.count(game.frames) >= @max_frame_count do
+        true -> [game_id: "game is over!"]
+        _ -> []
+      end
+    end)
+
   end
 end

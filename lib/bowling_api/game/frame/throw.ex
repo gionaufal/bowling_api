@@ -2,7 +2,6 @@ defmodule BowlingApi.Game.Frame.Throw do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias BowlingApi.Repo
   alias BowlingApi.Game.Frame
 
   @primary_key {:id, Ecto.UUID, autogenerate: true}
