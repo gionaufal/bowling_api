@@ -16,9 +16,14 @@ defmodule BowlingApi.Game do
   end
 
   def get_or_create_frame(game) do
-    throws_count = Enum.count(List.last(game.frames).throws)
+    throws_count = case Enum.any?(game.frames) do
+      false -> 0
+      true -> Enum.count(List.last(game.frames).throws)
+    end
+
     last_frame = List.last(game.frames)
     cond do
+      throws_count == 0 -> Frame.Create.call(%{game_id: game.id})
       throws_count > 1 or Frame.strike?(last_frame) -> Frame.Create.call(%{game_id: game.id})
       true -> {:ok, List.last(game.frames)}
     end
