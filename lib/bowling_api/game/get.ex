@@ -1,5 +1,7 @@
 defmodule BowlingApi.Game.Get do
-  alias BowlingApi.{Game, Repo}
+  import Ecto.Query
+
+  alias BowlingApi.{Game, Game.Frame.Throw, Repo}
   alias Ecto.UUID
 
   def call(id) do
@@ -10,7 +12,8 @@ defmodule BowlingApi.Game.Get do
   end
 
   defp get(uuid) do
-    case Repo.get(Game, uuid) |> Repo.preload(:throws) do
+    throws_query = from t in Throw, order_by: t.inserted_at
+    case Repo.get(Game, uuid) |> Repo.preload([throws: throws_query]) do
       nil -> {:error, "Game not found!"}
       game -> {:ok, game}
     end

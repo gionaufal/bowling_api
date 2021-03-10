@@ -23,4 +23,8 @@ defmodule BowlingApi.Game do
       true -> {:ok, List.last(game.frames)}
     end
   end
+
+  def score(game) do
+    Enum.reduce(game.frames, 0, fn frame, acc -> Frame.score(frame) + acc end)
+  end
 end
