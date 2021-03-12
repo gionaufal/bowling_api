@@ -31,7 +31,7 @@ defmodule BowlingApiWeb.GamesControllerTest do
       assert %{
         "id" => ^id,
         "inserted_at" => _inserted_at,
-        "score" => 0
+        "total_score" => 0
       } = response
     end
 
@@ -49,7 +49,7 @@ defmodule BowlingApiWeb.GamesControllerTest do
       assert %{
         "id" => ^id,
         "inserted_at" => _,
-        "score" => 10,
+        "total_score" => 10,
         "frames" =>  [
           %{
             "frame_id" => ^frame_id,

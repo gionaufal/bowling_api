@@ -20,7 +20,7 @@ defmodule BowlingApiWeb.GamesView do
       id: id,
       inserted_at: inserted_at,
       frames: render_many(frames, FramesView, "frame.json"),
-      score: Game.score(game)
+      total_score: Game.score(game)
     }
   end
 
