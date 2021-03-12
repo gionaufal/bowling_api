@@ -85,7 +85,7 @@ defmodule BowlingApi.Game.Frame do
     {:ok, game} = fetch_game(get_field(changeset, :game_id))
     validate_change(changeset, :game_id, fn _, _ ->
       case Enum.count(game.frames) >= @max_frame_count do
-        true -> [game_id: "game is over!"]
+        true -> [game_id: "Game is over!"]
         _ -> []
       end
     end)

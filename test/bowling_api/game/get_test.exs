@@ -9,7 +9,7 @@ defmodule BowlingApi.Game.GetTest do
 
       {:ok, response} = Get.call(game.id)
 
-      assert game == response
+      assert game |> BowlingApi.Repo.preload(:throws) == response
     end
 
     test "when given an invalid ID, returns an error" do
