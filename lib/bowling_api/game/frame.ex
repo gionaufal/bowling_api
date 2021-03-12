@@ -57,11 +57,14 @@ defmodule BowlingApi.Game.Frame do
   def allow_new_throw?(frame) do
     throws_count = Enum.count(frame.throws)
     cond do
-      last?(frame) and strike?(frame) and throws_count < 3 -> true
-      last?(frame) and spare?(frame) and throws_count < 3 -> true
+      last?(frame) and strike_or_spare?(frame) and throws_count < 3 -> true
       throws_count > 1 or strike?(frame) -> false
       throws_count < 2 -> true
     end
+  end
+
+  defp strike_or_spare?(frame) do
+    strike?(frame) or spare?(frame)
   end
 
   defp base_score(frame) do
