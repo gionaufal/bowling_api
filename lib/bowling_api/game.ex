@@ -24,6 +24,7 @@ defmodule BowlingApi.Game do
     last_frame = List.last(game.frames)
     cond do
       throws_count == 0 -> Frame.Create.call(%{game_id: game.id})
+      Frame.allow_new_throw?(last_frame) -> {:ok, List.last(game.frames)}
       throws_count > 1 or Frame.strike?(last_frame) -> Frame.Create.call(%{game_id: game.id})
       true -> {:ok, List.last(game.frames)}
     end

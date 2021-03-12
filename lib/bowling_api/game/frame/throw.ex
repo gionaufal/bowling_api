@@ -35,9 +35,10 @@ defmodule BowlingApi.Game.Frame.Throw do
       |> Enum.reduce(0, fn throw, acc -> throw.pins + acc end)
 
     validate_change(changeset, :pins, fn _, value ->
-      case (value + frame_total) > 10 do
-        true -> [pins: "Total of pins in a frame can't be greater than 10"]
-        _ -> []
+      cond do
+        Frame.last?(frame) -> []
+        (value + frame_total) > 10 -> [pins: "Total of pins in a frame can't be greater than 10"]
+        true -> []
       end
     end)
   end

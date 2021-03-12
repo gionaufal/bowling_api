@@ -15,6 +15,7 @@ defmodule BowlingApi.Game.Frame do
 
   @required [:game_id]
   @max_frame_count 10
+  @max_pins_count 10
 
   def build(params) do
     params
@@ -30,20 +31,36 @@ defmodule BowlingApi.Game.Frame do
   end
 
   def strike?(frame) do
-    List.first(frame.throws).pins == 10
+    List.first(frame.throws).pins == @max_pins_count
   end
 
   def spare?(frame) do
     Enum.count(frame.throws) == 2 &&
-      Enum.reduce(frame.throws, 0, fn throw, acc -> throw.pins + acc end) == 10
+      Enum.reduce(frame.throws, 0, fn throw, acc -> throw.pins + acc end) == @max_pins_count
   end
 
   def score(frame) do
     {:ok, game} = fetch_game(frame.game_id)
     cond do
+      last?(frame) -> base_score(frame)
       strike?(frame) -> score_next(game, throw_index(game, List.first(frame.throws)),  2) + base_score(frame)
       spare?(frame) -> score_next(game, throw_index(game, List.last(frame.throws)), 1) + base_score(frame)
       true -> base_score(frame)
+    end
+  end
+
+  def last?(frame) do
+    {:ok, game} = fetch_game(frame.game_id)
+    Enum.find_index(game.frames, fn f -> f == frame end) == @max_frame_count - 1
+  end
+
+  def allow_new_throw?(frame) do
+    throws_count = Enum.count(frame.throws)
+    cond do
+      last?(frame) and strike?(frame) and throws_count < 3 -> true
+      last?(frame) and spare?(frame) and throws_count < 3 -> true
+      throws_count > 1 or strike?(frame) -> false
+      throws_count < 2 -> true
     end
   end
 
@@ -72,6 +89,5 @@ defmodule BowlingApi.Game.Frame do
         _ -> []
       end
     end)
-
   end
 end
